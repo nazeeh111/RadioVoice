@@ -1,6 +1,6 @@
 # RadioVoice
 
-**Development history:** Developed locally using Git before publication. These projects were published to GitHub together, so similar upload dates do not indicate when development began.
+This repository packages [rflasermic](https://github.com/samyk/rflasermic/tree/7599f00a57b88cfcf8370cf88db6c04fa4e3da06), by **Samy Kamkar**, for RF-modulated optical audio experiments. RadioVoice adds repository presentation, documentation and an offline preservation record. The original methods, datasets and reported research results belong to the cited source. [Source and additions](NOTICE.md).
 
 ![RadioVoice](docs/identity.svg)
 

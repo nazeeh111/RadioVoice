@@ -8,14 +8,23 @@ RadioVoice organizes the flowgraphs with setup documentation and an offline pres
 
 ## Choose a flowgraph
 
-| Entry point | Companion graph |
-| --- | --- |
-| `laser_mf_demod.py` | `laser_mf_demod.grc` |
-| `laser_zmod.py` | `laser_zmod.grc` |
-| `saleae_demod.py` | `saleae_demod.grc` |
-| `usrp_laser_demod2.py` | `usrp_laser_demod2.grc` |
+- **`laser_mf_demod.grc`** → `laser_mf_demod.py`: reads a live `osmosdr`
+  source, translates and AM-demodulates the signal, and writes `/tmp/sdr.wav`.
+- **`laser_zmod.grc`** → `laser_zmod.py`: reads a live `osmosdr` source,
+  translates it, takes a real-valued channel and sends it to an audio sink.
+  This graph has no WAV writer.
+- **`saleae_demod.grc`** → `saleae_demod.py`: reads a float sample file from
+  the original author's absolute path, then provides audio playback and
+  `/tmp/sdr.wav` output. The input file is not included here.
+- **`usrp_laser_demod2.grc`** → `usrp_laser_demod2.py`: reads a live UHD/USRP
+  source, translates and AM-demodulates it, then provides audio playback and
+  `/tmp/sdr.wav` output.
 
-The Python files are generated GNU Radio applications. Open a `.grc` file in GNU Radio Companion to inspect its sources, filters and sinks before running it. Device addresses, sample rates, paths and signal connections retain their existing values.
+These are generated GNU Radio applications. Open each `.grc` file in GNU Radio
+Companion to inspect and adapt its source, sample rate and output path before
+running it. In particular, three graphs target the same `/tmp/sdr.wav` file;
+the supplied configuration can replace an existing file there. No captured
+signal or recovered-audio example is bundled.
 
 ## Environment
 

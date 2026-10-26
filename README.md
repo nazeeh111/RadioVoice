@@ -4,8 +4,6 @@
 
 GNU Radio flowgraphs for RF-modulated optical audio and recorded-signal demodulation.
 
-RadioVoice organizes the flowgraphs with setup documentation and an offline preservation record.
-
 ## Choose a flowgraph
 
 - **`laser_mf_demod.grc`** → `laser_mf_demod.py`: reads a live `osmosdr`
@@ -32,8 +30,6 @@ The generated files target GNU Radio 3.10.10.0 and use Qt. Individual graphs als
 
 [Preservation and verification](COMPATIBILITY.md) records the offline checks and their limits.
 
-## Source terms
+## License
 
-Based on [rflasermic](https://github.com/samyk/rflasermic/tree/7599f00a57b88cfcf8370cf88db6c04fa4e3da06) by **Samy Kamkar**. [Source and contribution details](NOTICE.md).
-
-New repository presentation and documentation are under [MIT](LICENSE-MIT). The generated Python flowgraphs retain their existing [GPL-3.0 terms](LICENSE-GPL-3.0) and SPDX notices. GNU Radio and device modules retain their separate terms.
+New repository presentation and documentation are under [MIT](LICENSE-MIT). The generated Python flowgraphs retain their existing [GPL-3.0 terms](LICENSE-GPL-3.0) and SPDX notices. GNU Radio and device modules retain their separate terms. [Source details](NOTICE.md).

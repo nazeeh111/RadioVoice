@@ -1,0 +1,38 @@
+name: Offline DSP and flowgraph compilation
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install distribution GNU Radio (no devices)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends gnuradio gr-osmosdr python3-scipy python3-yaml
+      - name: Numerical, changed-input and real GNU Radio core tests
+        run: /usr/bin/python3 -m unittest discover -s tests -v
+      - name: Compile retained GRC sources
+        env:
+          RADIOVOICE_INPUT: /tmp/radiovoice-fixture.f32
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          /usr/bin/python3 -c "import numpy as np; np.ones(4096,dtype=np.float32).tofile('/tmp/radiovoice-fixture.f32')"
+          mkdir -p /tmp/radiovoice-generated
+          for graph in *.grc; do PYTHONPATH="$PWD" grcc -o /tmp/radiovoice-generated "$graph"; done
+          /usr/bin/python3 -m compileall -q /tmp/radiovoice-generated
+          /usr/bin/python3 tests/check_generated_paths.py /tmp/radiovoice-generated
+      - name: Recompute inspectable outputs through GNU Radio
+        run: |
+          mkdir -p /tmp/radiovoice-empty-home
+          env -i HOME=/tmp/radiovoice-empty-home XDG_CACHE_HOME=/tmp/radiovoice-empty-home/cache PATH=/usr/bin:/bin /usr/bin/python3 offline_am.py --backend gnuradio --output /tmp/radiovoice-997
+          env -i HOME=/tmp/radiovoice-empty-home XDG_CACHE_HOME=/tmp/radiovoice-empty-home/cache PATH=/usr/bin:/bin /usr/bin/python3 offline_am.py --backend gnuradio --tone 1733 --output /tmp/radiovoice-1733
+      - uses: actions/upload-artifact@v4
+        with:
+          name: offline-am-and-generated-flowgraphs
+          path: |
+            /tmp/radiovoice-997
+            /tmp/radiovoice-1733
+            /tmp/radiovoice-generated

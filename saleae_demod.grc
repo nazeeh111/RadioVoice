@@ -33,6 +33,30 @@ options:
     state: enabled
 
 blocks:
+- name: radiovoice_imports
+  id: import
+  parameters:
+    imports: from radiovoice_paths import output_file, input_file
+  states:
+    coordinate: [8, 240]
+    rotation: 0
+    state: enabled
+- name: output_path
+  id: variable
+  parameters:
+    value: output_file('saleae_demod')
+  states:
+    coordinate: [8, 280]
+    rotation: 0
+    state: enabled
+- name: input_path
+  id: variable
+  parameters:
+    value: input_file()
+  states:
+    coordinate: [8, 320]
+    rotation: 0
+    state: enabled
 - name: decim
   id: variable
   parameters:
@@ -324,7 +348,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: ''
-    file: /Users/samy/Code/laser/mic/sal/window4.bin.2
+    file: input_path
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -371,7 +395,7 @@ blocks:
     bits_per_sample3: FORMAT_VORBIS
     bits_per_sample4: FORMAT_PCM_16
     comment: ''
-    file: /tmp/sdr.wav
+    file: output_path
     format: FORMAT_WAV
     nchan: '1'
     samp_rate: samp_rate_au

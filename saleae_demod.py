@@ -1,13 +1,15 @@
+# SPDX-License-Identifier: GPL-3.0
+# Regenerated with GNU Radio Companion 3.10.9.2; upstream GPL notices retained.
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# RadioVoice signal-processing entry point; computational graph preserved.
 
 #
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
 # Title: Not titled yet
-# GNU Radio version: 3.10.10.0
+# Author: nazeeh111
+# GNU Radio version: 3.10.9.2
 
 from PyQt5 import Qt
 from gnuradio import qtgui
@@ -26,6 +28,7 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+from radiovoice_paths import output_file, input_file
 import sip
 
 
@@ -71,8 +74,10 @@ class saleae_demod(gr.top_block, Qt.QWidget):
         self.mid_sr = mid_sr = int(samp_rate/mid_decim)
         self.end_decim = end_decim = int(mid_sr/samp_rate_au)
         self.trw = trw = 5000/5
+        self.output_path = output_path = output_file('saleae_demod')
         self.lpf = lpf = 20000
         self.laser_freq = laser_freq = 100e3
+        self.input_path = input_path = input_file()
         self.hpf = hpf = 100
         self.gain_xlat = gain_xlat = 10
         self.gain_hp = gain_hp = 10
@@ -415,7 +420,7 @@ class saleae_demod(gr.top_block, Qt.QWidget):
         self.freq_xlating_fir_filter_xxx_0_0_1 = filter.freq_xlating_fir_filter_fcf(mid_decim, firdes.band_pass(gain_xlat, samp_rate, 30, lpf, trw), laser_freq, samp_rate)
         self.dc_blocker_xx_0 = filter.dc_blocker_ff((32*8), True)
         self.blocks_wavfile_sink_0 = blocks.wavfile_sink(
-            '/tmp/sdr.wav',
+            output_path,
             1,
             samp_rate_au,
             blocks.FORMAT_WAV,
@@ -423,7 +428,7 @@ class saleae_demod(gr.top_block, Qt.QWidget):
             False
             )
         self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_float*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_float*1, '/Users/samy/Code/laser/mic/sal/window4.bin.2', False, 0, 0)
+        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_float*1, input_path, False, 0, 0)
         self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)
         self.audio_sink_0 = audio.sink(end_sr, '', True)
         self.analog_am_demod_cf_0 = analog.am_demod_cf(
@@ -517,6 +522,13 @@ class saleae_demod(gr.top_block, Qt.QWidget):
         self.trw = trw
         self.freq_xlating_fir_filter_xxx_0_0_1.set_taps(firdes.band_pass(self.gain_xlat, self.samp_rate, 30, self.lpf, self.trw))
 
+    def get_output_path(self):
+        return self.output_path
+
+    def set_output_path(self, output_path):
+        self.output_path = output_path
+        self.blocks_wavfile_sink_0.open(self.output_path)
+
     def get_lpf(self):
         return self.lpf
 
@@ -530,6 +542,13 @@ class saleae_demod(gr.top_block, Qt.QWidget):
     def set_laser_freq(self, laser_freq):
         self.laser_freq = laser_freq
         self.freq_xlating_fir_filter_xxx_0_0_1.set_center_freq(self.laser_freq)
+
+    def get_input_path(self):
+        return self.input_path
+
+    def set_input_path(self, input_path):
+        self.input_path = input_path
+        self.blocks_file_source_0.open(self.input_path, False)
 
     def get_hpf(self):
         return self.hpf

@@ -1,0 +1,3 @@
+-r requirements-offline.txt
+scipy>=1.11,<2
+PyYAML>=6,<7

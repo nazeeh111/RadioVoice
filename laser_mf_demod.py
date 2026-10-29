@@ -1,13 +1,15 @@
+# SPDX-License-Identifier: GPL-3.0
+# Regenerated with GNU Radio Companion 3.10.9.2; upstream GPL notices retained.
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# RadioVoice signal-processing entry point; computational graph preserved.
 
 #
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
 # Title: laser mic mod
-# GNU Radio version: 3.10.10.0
+# Author: nazeeh111
+# GNU Radio version: 3.10.9.2
 
 from PyQt5 import Qt
 from gnuradio import qtgui
@@ -24,6 +26,7 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+from radiovoice_paths import output_file, input_file
 import osmosdr
 import time
 import sip
@@ -77,6 +80,7 @@ class laser_mf_demod(gr.top_block, Qt.QWidget):
         self.trw = trw = 5000
         self.rf_gain = rf_gain = 0
         self.rf_freq = rf_freq = laser_freq+rf_offset+upconvert_freq
+        self.output_path = output_path = output_file('laser_mf_demod')
         self.lpf = lpf = 20000*1.8
         self.if_gain = if_gain = 10
         self.hpf = hpf = 100
@@ -261,7 +265,7 @@ class laser_mf_demod(gr.top_block, Qt.QWidget):
                 6.76))
         self.freq_xlating_fir_filter_xxx_0_0_1 = filter.freq_xlating_fir_filter_ccc(mid_decim, firdes.band_pass(gain_xlat, samp_rate, 30, lpf, trw), (laser_freq-laser_freq-rf_offset+up_offset), samp_rate)
         self.blocks_wavfile_sink_0 = blocks.wavfile_sink(
-            '/tmp/sdr.wav',
+            output_path,
             1,
             samp_rate_au,
             blocks.FORMAT_WAV,
@@ -394,6 +398,13 @@ class laser_mf_demod(gr.top_block, Qt.QWidget):
         self.rf_freq = rf_freq
         self.osmosdr_source_0.set_center_freq(self.rf_freq, 0)
         self.qtgui_freq_sink_x_0_0.set_frequency_range(self.rf_freq, self.samp_rate)
+
+    def get_output_path(self):
+        return self.output_path
+
+    def set_output_path(self, output_path):
+        self.output_path = output_path
+        self.blocks_wavfile_sink_0.open(self.output_path)
 
     def get_lpf(self):
         return self.lpf

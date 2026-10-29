@@ -62,9 +62,9 @@ class OfflineTests(unittest.TestCase):
             self.assertNotIn('/Users/samy/', source)
             fields = {b['name']: b for b in graph['blocks']}
             self.assertEqual(fields['radiovoice_imports']['parameters']['imports'], 'from radiovoice_paths import output_file, input_file')
-            self.assertEqual(fields['blocks_wavfile_sink_0']['parameters']['file'], '${output_path}')
+            self.assertEqual(fields['blocks_wavfile_sink_0']['parameters']['file'], 'output_path')
             if name == 'saleae_demod':
-                self.assertEqual(fields['blocks_file_source_0']['parameters']['file'], '${input_path}')
+                self.assertEqual(fields['blocks_file_source_0']['parameters']['file'], 'input_path')
                 self.assertIn('input_path = input_file()', source)
 
     @unittest.skipUnless(importlib.util.find_spec('gnuradio'), 'GNU Radio not installed; explicit separate gate')

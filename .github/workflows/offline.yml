@@ -23,6 +23,7 @@ jobs:
           mkdir -p /tmp/radiovoice-generated
           for graph in *.grc; do PYTHONPATH="$PWD" grcc -o /tmp/radiovoice-generated "$graph"; done
           /usr/bin/python3 -m compileall -q /tmp/radiovoice-generated
+          /usr/bin/python3 tests/check_generated_paths.py /tmp/radiovoice-generated
       - name: Recompute inspectable outputs through GNU Radio
         run: |
           /usr/bin/python3 offline_am.py --backend gnuradio --output /tmp/radiovoice-997

@@ -54,7 +54,7 @@ external captured-signal performance is established by these changes.
 
 ## Environment
 
-The generated files target GNU Radio 3.10.10.0 and use Qt. Individual graphs also import SDR-specific modules such as `osmosdr`. Hardware sources need compatible devices and drivers; recorded-data sources need their expected input files. This repository does not bundle a runnable Python environment.
+The original flowgraphs targeted GNU Radio 3.10.10.0; the current Python files were regenerated with GNU Radio Companion 3.10.9.2 and use Qt. Individual graphs also import SDR-specific modules such as `osmosdr`. Hardware sources need compatible devices and drivers; recorded-data sources need their expected input files. This repository does not bundle a runnable Python environment.
 
 [Preservation and verification](COMPATIBILITY.md) records the offline checks and their limits.
 

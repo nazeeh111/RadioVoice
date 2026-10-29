@@ -1,13 +1,15 @@
+# SPDX-License-Identifier: GPL-3.0
+# Regenerated with GNU Radio Companion 3.10.9.2; upstream GPL notices retained.
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# RadioVoice signal-processing entry point; computational graph preserved.
 
 #
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
 # Title: samy laser mic usrp upconverted + modulated
-# GNU Radio version: 3.10.10.0
+# Author: nazeeh111
+# GNU Radio version: 3.10.9.2
 
 from PyQt5 import Qt
 from gnuradio import qtgui
@@ -20,7 +22,6 @@ from gnuradio.filter import firdes
 from gnuradio import gr
 from gnuradio.fft import window
 import sys
-from radiovoice_paths import output_file, input_file
 import signal
 from PyQt5 import Qt
 from argparse import ArgumentParser
@@ -28,6 +29,7 @@ from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import uhd
 import time
+from radiovoice_paths import output_file, input_file
 import sip
 
 
@@ -35,7 +37,6 @@ import sip
 class usrp_laser_demod2(gr.top_block, Qt.QWidget):
 
     def __init__(self):
-        output_path = output_file('usrp_laser_demod2')
         gr.top_block.__init__(self, "samy laser mic usrp upconverted + modulated", catch_exceptions=True)
         Qt.QWidget.__init__(self)
         self.setWindowTitle("samy laser mic usrp upconverted + modulated")
@@ -79,13 +80,13 @@ class usrp_laser_demod2(gr.top_block, Qt.QWidget):
         self.up_offset = up_offset = 0
         self.trw = trw = 1000
         self.rf_freq = rf_freq = laser_freq+rf_offset+upconvert_freq
+        self.output_path = output_path = output_file('usrp_laser_demod2')
         self.lpf = lpf = 20000/4*2
         self.hpf_trw = hpf_trw = 50
         self.hpf = hpf = 60
         self.gain_xlat = gain_xlat = 2
         self.gain_hp = gain_hp = 15
         self.end_sr = end_sr = int(mid_sr/end_decim)
-        self.decim = decim = int(samp_rate/samp_rate_au)
 
         ##################################################
         # Blocks
@@ -338,7 +339,6 @@ class usrp_laser_demod2(gr.top_block, Qt.QWidget):
 
     def set_samp_rate_au(self, samp_rate_au):
         self.samp_rate_au = samp_rate_au
-        self.set_decim(int(self.samp_rate/self.samp_rate_au))
         self.set_end_decim(int(self.mid_sr/self.samp_rate_au))
         self.set_mid_decim(int(self.samp_rate/self.samp_rate_au/8))
         self.set_samp_rate(self.samp_rate_au * 10 *2)
@@ -351,7 +351,6 @@ class usrp_laser_demod2(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.set_decim(int(self.samp_rate/self.samp_rate_au))
         self.set_mid_decim(int(self.samp_rate/self.samp_rate_au/8))
         self.set_mid_sr(int(self.samp_rate/self.mid_decim))
         self.freq_xlating_fir_filter_xxx_0_0_1.set_taps(firdes.band_pass(self.gain_xlat, self.samp_rate, 30, self.lpf, self.trw))
@@ -427,6 +426,13 @@ class usrp_laser_demod2(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0_0.set_frequency_range(self.rf_freq, self.samp_rate)
         self.uhd_usrp_source_0.set_center_freq(self.rf_freq, 0)
 
+    def get_output_path(self):
+        return self.output_path
+
+    def set_output_path(self, output_path):
+        self.output_path = output_path
+        self.blocks_wavfile_sink_0.open(self.output_path)
+
     def get_lpf(self):
         return self.lpf
 
@@ -467,12 +473,6 @@ class usrp_laser_demod2(gr.top_block, Qt.QWidget):
 
     def set_end_sr(self, end_sr):
         self.end_sr = end_sr
-
-    def get_decim(self):
-        return self.decim
-
-    def set_decim(self, decim):
-        self.decim = decim
 
 
 

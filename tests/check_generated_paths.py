@@ -6,6 +6,7 @@ import sys
 for graph in ('laser_mf_demod', 'saleae_demod', 'usrp_laser_demod2'):
     path = Path(sys.argv[1]) / (graph + '.py')
     tree = ast.parse(path.read_text())
+    assert ast.dump(tree) == ast.dump(ast.parse(Path(graph + '.py').read_text())), (graph, 'shipped Python differs from GRC regeneration')
     calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)
              and isinstance(node.func, ast.Attribute)]
     sinks = [call for call in calls if call.func.attr == 'wavfile_sink']

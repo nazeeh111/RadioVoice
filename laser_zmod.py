@@ -19,6 +19,7 @@ from gnuradio.filter import firdes
 from gnuradio import gr
 from gnuradio.fft import window
 import sys
+from radiovoice_paths import output_file, input_file
 import signal
 from PyQt5 import Qt
 from argparse import ArgumentParser

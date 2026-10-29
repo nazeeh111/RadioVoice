@@ -19,6 +19,7 @@ from gnuradio.filter import firdes
 from gnuradio import gr
 from gnuradio.fft import window
 import sys
+from radiovoice_paths import output_file, input_file
 import signal
 from PyQt5 import Qt
 from argparse import ArgumentParser
@@ -33,6 +34,7 @@ import sip
 class laser_mf_demod(gr.top_block, Qt.QWidget):
 
     def __init__(self):
+        output_path = output_file('laser_mf_demod')
         gr.top_block.__init__(self, "laser mic mod", catch_exceptions=True)
         Qt.QWidget.__init__(self)
         self.setWindowTitle("laser mic mod")
@@ -261,7 +263,7 @@ class laser_mf_demod(gr.top_block, Qt.QWidget):
                 6.76))
         self.freq_xlating_fir_filter_xxx_0_0_1 = filter.freq_xlating_fir_filter_ccc(mid_decim, firdes.band_pass(gain_xlat, samp_rate, 30, lpf, trw), (laser_freq-laser_freq-rf_offset+up_offset), samp_rate)
         self.blocks_wavfile_sink_0 = blocks.wavfile_sink(
-            '/tmp/sdr.wav',
+            output_path,
             1,
             samp_rate_au,
             blocks.FORMAT_WAV,

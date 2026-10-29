@@ -21,6 +21,7 @@ from gnuradio.filter import firdes
 from gnuradio import gr
 from gnuradio.fft import window
 import sys
+from radiovoice_paths import output_file, input_file
 import signal
 from PyQt5 import Qt
 from argparse import ArgumentParser
@@ -33,6 +34,8 @@ import sip
 class saleae_demod(gr.top_block, Qt.QWidget):
 
     def __init__(self):
+        input_path = input_file()
+        output_path = output_file('saleae_demod')
         gr.top_block.__init__(self, "Not titled yet", catch_exceptions=True)
         Qt.QWidget.__init__(self)
         self.setWindowTitle("Not titled yet")
@@ -415,7 +418,7 @@ class saleae_demod(gr.top_block, Qt.QWidget):
         self.freq_xlating_fir_filter_xxx_0_0_1 = filter.freq_xlating_fir_filter_fcf(mid_decim, firdes.band_pass(gain_xlat, samp_rate, 30, lpf, trw), laser_freq, samp_rate)
         self.dc_blocker_xx_0 = filter.dc_blocker_ff((32*8), True)
         self.blocks_wavfile_sink_0 = blocks.wavfile_sink(
-            '/tmp/sdr.wav',
+            output_path,
             1,
             samp_rate_au,
             blocks.FORMAT_WAV,
@@ -423,7 +426,7 @@ class saleae_demod(gr.top_block, Qt.QWidget):
             False
             )
         self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_float*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_float*1, '/Users/samy/Code/laser/mic/sal/window4.bin.2', False, 0, 0)
+        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_float*1, input_path, False, 0, 0)
         self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)
         self.audio_sink_0 = audio.sink(end_sr, '', True)
         self.analog_am_demod_cf_0 = analog.am_demod_cf(
